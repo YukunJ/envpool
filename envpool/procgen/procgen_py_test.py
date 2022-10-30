@@ -206,7 +206,8 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         action = np.array([act_space.sample() for _ in range(num_env)])
         _, raw_reward, raw_done, _ = env_procgen.step(action[0])
         _, envpool_reward, envpool_done, _, = env_gym.step(action)
-        envpool_reward, envpool_done = envpool_reward[0], envpool_done[0]  # pylint: disable=index
+        envpool_reward = envpool_reward[0]
+        envpool_done = envpool_done[0]  # pylint: disable=index
         # must die and earn reward same time aligned
         self.assertTrue(envpool_reward == raw_reward)
         self.assertTrue(raw_done == envpool_done)
