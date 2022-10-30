@@ -1,7 +1,7 @@
 --- qt-utils.h
 +++ qt-utils.h
-@@ -4,8 +4,8 @@
- Qt utility functions
+@@ -6,8 +6,8 @@
+
  */
 
 -#include <QRect>
