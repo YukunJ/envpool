@@ -48,7 +48,7 @@ static const int kActionNum = 15;  // 0 ~ 14 both sides included
    Notice the inheritance hierarchy is Game > BasicAbstractGame > [detailed 15
    games]
 */
-std::shared_ptr<Game> MakeGame(std::string& name) {
+std::shared_ptr<Game> MakeGame(const std::string& name) {
   if (name == "bigfish") {
     return make_bigfish();
   }
