@@ -135,11 +135,11 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     logging.info(f"Raw envpool Procgen FPS = {fps:.6f}")
 
   def gym_deterministic_check(
-          self,
-          game_name: str,
-          spec_cls: Any,
-          envpool_cls: Any,
-          num_envs: int = 4
+    self,
+    game_name: str,
+    spec_cls: Any,
+    envpool_cls: Any,
+    num_envs: int = 4
   ) -> None:
     logging.info(f"deterministic check for gym {game_name}")
     env0 = envpool_cls(
@@ -180,7 +180,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       self.assertTrue(np.all(obs2 <= obs_max), obs2)
 
   def gym_align_check(
-          self, game_name, spec_cls: Any, envpool_cls: Any
+    self, game_name, spec_cls: Any, envpool_cls: Any
   ) -> None:
     logging.info(f"align check for gym {game_name}")
     timeout = procgen_timeout_list[game_name]
@@ -214,11 +214,11 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         self.assertTrue(raw_done == envpool_done)
 
   def dmc_deterministic_check(
-          self,
-          game_name,
-          spec_cls: Any,
-          envpool_cls: Any,
-          num_envs: int = 4,
+    self,
+    game_name,
+    spec_cls: Any,
+    envpool_cls: Any,
+    num_envs: int = 4,
   ) -> None:
     logging.info(f"deterministic check for dmc {game_name}")
     np.random.seed(0)
@@ -259,7 +259,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       self.assertFalse(np.allclose(obs0, obs2))
 
   def dmc_align_check(
-          self, game_name, spec_cls: Any, envpool_cls: Any
+    self, game_name, spec_cls: Any, envpool_cls: Any
   ) -> None:
     logging.info(f"align check for dmc {game_name}")
     timeout = procgen_timeout_list[game_name]
@@ -285,7 +285,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         _, raw_reward, raw_done, _ = env_procgen.step(action[0])
         r = env_dmc.step(action)
         envpool_reward, envpool_done = r.reward[
-                                         0], r.step_type == dm_env.StepType.LAST
+          0], r.step_type == dm_env.StepType.LAST
         # must die and earn reward same time aligned
         self.assertTrue(envpool_reward == raw_reward)
         self.assertTrue(raw_done == envpool_done)
@@ -305,12 +305,10 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     for game in procgen_games_list:
       self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
 
-
   def test_dmc_align(self) -> None:
     # iterate over all procgen games to test DMC align
     for game in procgen_games_list:
       self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
-
 
 
 if __name__ == "__main__":
