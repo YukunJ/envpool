@@ -292,30 +292,24 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
   def test_gym_deterministic(self) -> None:
     # iterate over all procgen games to test Gym deterministic
     for game in procgen_games_list:
-      print(f"gym_deterministic for {game}...", end=" ")
       self.gym_deterministic_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
-      print("Finish")
 
   def test_gym_align(self) -> None:
     # iterate over all procgen games to test Gym align
     for game in procgen_games_list:
-      print(f"gym_align for {game}...", end=" ")
       self.gym_align_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
-      print("Finish")
 
-  def test_dmc_deterministic(self) -> None:
-    # iterate over all procgen games to test DMC deterministic
-    for game in procgen_games_list:
-      print(f"dmc_deterministic for {game}...", end=" ")
-      self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
-      print("Finish")
+  # def test_dmc_deterministic(self) -> None:
+  #   # iterate over all procgen games to test DMC deterministic
+  #   for game in procgen_games_list:
+  #     self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
+  #
+  #
+  # def test_dmc_align(self) -> None:
+  #   # iterate over all procgen games to test DMC align
+  #   for game in procgen_games_list:
+  #     self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
 
-  def test_dmc_align(self) -> None:
-    # iterate over all procgen games to test DMC align
-    for game in procgen_games_list:
-      print(f"dmc_align for {game}...", end=" ")
-      self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
-      print("Finish")
 
 
 if __name__ == "__main__":
