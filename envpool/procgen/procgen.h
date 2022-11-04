@@ -235,7 +235,7 @@ class ProcgenEnv : public Env<ProcgenEnvSpec> {
     for (int y = 0; y < kResH; y++) {
       for (int x = 0; x < kResW; x++) {
         for (int rgb = 0; rgb < kRgbFactor; rgb++) {
-          int offset = rgb + x * KRgbFactor + y * kResW * kRgbFactor;
+          int offset = rgb + x * kRgbFactor + y * kResW * kRgbFactor;
           state["obs:obs"_][0][offset] = static_cast<uint8_t>(src[offset]);
         }
       }
@@ -244,7 +244,7 @@ class ProcgenEnv : public Env<ProcgenEnvSpec> {
   }
 };
 
-typedef AsyncEnvPool<ProcgenEnv> ProcgenEnvPool;
+using ProcgenEnvPool = AsyncEnvPool<ProcgenEnv>;
 
 }  // namespace procgen
 

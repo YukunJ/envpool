@@ -19,7 +19,7 @@
 // generate python-side (raw) ProcgenEnvSpec
 using ProcgenEnvSpec = PyEnvSpec<procgen::ProcgenEnvSpec>;
 // generate python-side (raw) ProcgenEnvPool
-using ProcgenEnvPool = PyEnvPool<procgen::ProcgenEnvPool>
+using ProcgenEnvPool = PyEnvPool<procgen::ProcgenEnvPool>;
 // generate procgen.so
 PYBIND11_MODULE(procgen_envpool, m) {
   REGISTER(m, ProcgenEnvSpec, ProcgenEnvPool)
