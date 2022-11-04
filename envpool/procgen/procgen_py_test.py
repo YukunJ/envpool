@@ -101,45 +101,45 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     self.assertEqual(len(default_conf), len(config_keys))
     self.assertEqual(sorted(config_keys), sorted(ref_config_keys))
 
-  # def test_raw_envpool(self) -> None:
-  #   # create raw procgen environment and run
-  #   conf = dict(
-  #     zip(
-  #       _ProcgenEnvSpec._config_keys, _ProcgenEnvSpec._default_config_values
-  #     )
-  #   )
-  #   conf["num_envs"] = num_envs = 1
-  #   conf["batch_size"] = batch = 1
-  #   conf["num_threads"] = os.cpu_count()
-  #   env_spec = _ProcgenEnvSpec(tuple(conf.values()))
-  #   env = _ProcgenEnvPool(env_spec)
-  #   state_keys = env._state_keys
-  #   env._reset(np.arange(num_envs, dtype=np.int32))
-  #   total = 500
-  #   actions = np.random.randint(15, size=(total, batch))
-  #   t = time.time()
-  #   for i in range(total):
-  #     state = dict(zip(state_keys, env._recv()))
-  #     action = {
-  #       "env_id": state["info:env_id"],
-  #       "players.env_id": state["info:players.env_id"],
-  #       "action": actions[i],
-  #     }
-  #     # if (i < 100):
-  #     # #   output the first few steps to picture for animation
-  #     # #   to check if the game is moving as we expect
-  #     #   rgb_to_picture(state["obs:obs"][0], i, "procgen)
-  #     env._send(tuple(action.values()))
-  #   duration = time.time() - t
-  #   fps = total * batch / duration
-  #   logging.info(f"Raw envpool Procgen FPS = {fps:.6f}")
+  def test_raw_envpool(self) -> None:
+    # create raw procgen environment and run
+    conf = dict(
+      zip(
+        _ProcgenEnvSpec._config_keys, _ProcgenEnvSpec._default_config_values
+      )
+    )
+    conf["num_envs"] = num_envs = 1
+    conf["batch_size"] = batch = 1
+    conf["num_threads"] = os.cpu_count()
+    env_spec = _ProcgenEnvSpec(tuple(conf.values()))
+    env = _ProcgenEnvPool(env_spec)
+    state_keys = env._state_keys
+    env._reset(np.arange(num_envs, dtype=np.int32))
+    total = 300
+    actions = np.random.randint(15, size=(total, batch))
+    t = time.time()
+    for i in range(total):
+      state = dict(zip(state_keys, env._recv()))
+      action = {
+        "env_id": state["info:env_id"],
+        "players.env_id": state["info:players.env_id"],
+        "action": actions[i],
+      }
+      # if (i < 100):
+      # #   output the first few steps to picture for animation
+      # #   to check if the game is moving as we expect
+      #   rgb_to_picture(state["obs:obs"][0], i, "procgen)
+      env._send(tuple(action.values()))
+    duration = time.time() - t
+    fps = total * batch / duration
+    logging.info(f"Raw envpool Procgen FPS = {fps:.6f}")
 
   def gym_deterministic_check(
-    self,
-    game_name: str,
-    spec_cls: Any,
-    envpool_cls: Any,
-    num_envs: int = 4
+          self,
+          game_name: str,
+          spec_cls: Any,
+          envpool_cls: Any,
+          num_envs: int = 4
   ) -> None:
     logging.info(f"deterministic check for gym {game_name}")
     env0 = envpool_cls(
@@ -161,7 +161,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     eps = np.finfo(np.float32).eps
     obs_min = 0.0 - eps
     obs_max = 255.0 + eps
-    total = 200
+    total = 300
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array([act_space.sample() for _ in range(num_envs)])
@@ -180,12 +180,12 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       self.assertTrue(np.all(obs2 <= obs_max), obs2)
 
   def gym_align_check(
-    self, game_name, spec_cls: Any, envpool_cls: Any
+          self, game_name, spec_cls: Any, envpool_cls: Any
   ) -> None:
     logging.info(f"align check for gym {game_name}")
     timeout = procgen_timeout_list[game_name]
     num_env = 1
-    for i in range(1):
+    for i in range(3):
       env_gym = envpool_cls(
         spec_cls(
           spec_cls.gen_config(num_envs=num_env, seed=i, game_name=game_name)
@@ -205,7 +205,8 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         cnt += 1
         action = np.array([act_space.sample() for _ in range(num_env)])
         _, raw_reward, raw_done, _ = env_procgen.step(action[0])
-        _, envpool_reward, envpool_done, _, = env_gym.step(action)
+        step_info = env_gym.step(action)
+        envpool_reward, envpool_done = step_info[1], step_info[2]
         envpool_reward = envpool_reward[0]
         envpool_done = envpool_done[0]  # pylint: disable=index
         # must die and earn reward same time aligned
@@ -213,11 +214,11 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         self.assertTrue(raw_done == envpool_done)
 
   def dmc_deterministic_check(
-    self,
-    game_name,
-    spec_cls: Any,
-    envpool_cls: Any,
-    num_envs: int = 4,
+          self,
+          game_name,
+          spec_cls: Any,
+          envpool_cls: Any,
+          num_envs: int = 4,
   ) -> None:
     logging.info(f"deterministic check for dmc {game_name}")
     np.random.seed(0)
@@ -237,7 +238,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       )
     )
     act_spec = env0.action_spec()
-    total = 200
+    total = 300
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array(
@@ -258,12 +259,12 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       self.assertFalse(np.allclose(obs0, obs2))
 
   def dmc_align_check(
-    self, game_name, spec_cls: Any, envpool_cls: Any
+          self, game_name, spec_cls: Any, envpool_cls: Any
   ) -> None:
     logging.info(f"align check for dmc {game_name}")
     timeout = procgen_timeout_list[game_name]
     num_env = 1
-    for i in range(1):
+    for i in range(3):
       env_dmc = envpool_cls(
         spec_cls(
           spec_cls.gen_config(num_envs=num_env, seed=i, game_name=game_name)
@@ -284,7 +285,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         _, raw_reward, raw_done, _ = env_procgen.step(action[0])
         r = env_dmc.step(action)
         envpool_reward, envpool_done = r.reward[
-          0], r.step_type == dm_env.StepType.LAST
+                                         0], r.step_type == dm_env.StepType.LAST
         # must die and earn reward same time aligned
         self.assertTrue(envpool_reward == raw_reward)
         self.assertTrue(raw_done == envpool_done)
@@ -299,16 +300,16 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     for game in procgen_games_list:
       self.gym_align_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
 
-  # def test_dmc_deterministic(self) -> None:
-  #   # iterate over all procgen games to test DMC deterministic
-  #   for game in procgen_games_list:
-  #     self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
-  #
-  #
-  # def test_dmc_align(self) -> None:
-  #   # iterate over all procgen games to test DMC align
-  #   for game in procgen_games_list:
-  #     self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
+  def test_dmc_deterministic(self) -> None:
+    # iterate over all procgen games to test DMC deterministic
+    for game in procgen_games_list:
+      self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
+
+
+  def test_dmc_align(self) -> None:
+    # iterate over all procgen games to test DMC align
+    for game in procgen_games_list:
+      self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
 
 
 
