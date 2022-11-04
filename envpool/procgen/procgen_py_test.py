@@ -61,7 +61,9 @@ procgen_timeout_list = {
 }
 
 
-def rgb_to_picture(pixels: Any, count: int = pic_count, prefix_name: str = "procgen") -> None:
+def rgb_to_picture(
+  pixels: Any, count: int = pic_count, prefix_name: str = "procgen"
+) -> None:
   # convert a state's rgb 64x64x3 game observation into picture by cv2
   # for sanity check if the game is running correctly
   # state is ordered in y -> x -> rgb in one dimension array
@@ -90,9 +92,10 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     # test the config key is same as what we expect
     ref_config_keys = [
       "action_num", "base_path", "batch_size", "distribution_mode",
-      "game_name", "use_sequential_levels", "max_episode_steps" ,"max_num_players", "num_envs",
-      "num_levels", "num_threads", "seed", "start_level", "state_num",
-      "gym_reset_return_info", "thread_affinity_offset"
+      "game_name", "use_sequential_levels", "max_episode_steps",
+      "max_num_players", "num_envs", "num_levels", "num_threads", "seed",
+      "start_level", "state_num", "gym_reset_return_info",
+      "thread_affinity_offset"
     ]
     default_conf = _ProcgenEnvSpec._default_config_values
     self.assertTrue(isinstance(default_conf, tuple))
@@ -135,11 +138,11 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     logging.info(f"Raw envpool Procgen FPS = {fps:.6f}")
 
   def gym_deterministic_check(
-          self,
-          game_name: str,
-          spec_cls: Any,
-          envpool_cls: Any,
-          num_envs: int = 4
+    self,
+    game_name: str,
+    spec_cls: Any,
+    envpool_cls: Any,
+    num_envs: int = 4
   ) -> None:
     logging.info(f"deterministic check for gym {game_name}")
     env0 = envpool_cls(
@@ -180,12 +183,12 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       self.assertTrue(np.all(obs2 <= obs_max), obs2)
 
   def gym_align_check(
-          self, game_name: str, spec_cls: Any, envpool_cls: Any
+    self, game_name: str, spec_cls: Any, envpool_cls: Any
   ) -> None:
     logging.info(f"align check for gym {game_name}")
     timeout = procgen_timeout_list[game_name]
     num_env = 1
-    for i in range(3):
+    for i in range(2):
       env_gym = envpool_cls(
         spec_cls(
           spec_cls.gen_config(num_envs=num_env, seed=i, game_name=game_name)
@@ -214,11 +217,11 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         self.assertTrue(raw_done == envpool_done)
 
   def dmc_deterministic_check(
-          self,
-          game_name: str,
-          spec_cls: Any,
-          envpool_cls: Any,
-          num_envs: int = 4,
+    self,
+    game_name: str,
+    spec_cls: Any,
+    envpool_cls: Any,
+    num_envs: int = 4,
   ) -> None:
     logging.info(f"deterministic check for dmc {game_name}")
     np.random.seed(0)
@@ -259,12 +262,12 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       self.assertFalse(np.allclose(obs0, obs2))
 
   def dmc_align_check(
-          self, game_name: str, spec_cls: Any, envpool_cls: Any
+    self, game_name: str, spec_cls: Any, envpool_cls: Any
   ) -> None:
     logging.info(f"align check for dmc {game_name}")
     timeout = procgen_timeout_list[game_name]
     num_env = 1
-    for i in range(3):
+    for i in range(2):
       env_dmc = envpool_cls(
         spec_cls(
           spec_cls.gen_config(num_envs=num_env, seed=i, game_name=game_name)
@@ -285,7 +288,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         _, raw_reward, raw_done, _ = env_procgen.step(action[0])
         r = env_dmc.step(action)
         envpool_reward, envpool_done = r.reward[
-                                         0], r.step_type == dm_env.StepType.LAST
+          0], r.step_type == dm_env.StepType.LAST
         # must die and earn reward same time aligned
         self.assertTrue(envpool_reward == raw_reward)
         self.assertTrue(raw_done == envpool_done)
@@ -305,12 +308,10 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     for game in procgen_games_list:
       self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
 
-
   def test_dmc_align(self) -> None:
     # iterate over all procgen games to test DMC align
     for game in procgen_games_list:
       self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
-
 
 
 if __name__ == "__main__":
