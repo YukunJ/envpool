@@ -33,6 +33,8 @@ namespace procgen {
    All the procgen's games have the same observation buffer size, 64 x 64 pixels
    x 3 colors (RGB) there are 15 possible action buttoms and observation is RGB
    32 or RGB 888,
+   QT library build needs:
+   sudo apt update && sudo apt install qt5-default && sudo apt-get install qtdeclarative5-dev
    https://github.com/openai/procgen/blob/5e1dbf341d291eff40d1f9e0c0a0d5003643aebf/procgen/src/game.h#L23
  */
 static const int RES_W = 64;

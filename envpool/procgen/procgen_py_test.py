@@ -115,7 +115,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     env = _ProcgenEnvPool(env_spec)
     state_keys = env._state_keys
     env._reset(np.arange(num_envs, dtype=np.int32))
-    total = 1000
+    total = 500
     actions = np.random.randint(15, size=(total, batch))
     t = time.time()
     for i in range(total):
@@ -185,7 +185,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     logging.info(f"align check for gym {game_name}")
     timeout = procgen_timeout_list[game_name]
     num_env = 1
-    for i in range(5):
+    for i in range(3):
       env_gym = envpool_cls(
         spec_cls(
           spec_cls.gen_config(num_envs=num_env, seed=i, game_name=game_name)
