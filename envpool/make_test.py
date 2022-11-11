@@ -175,6 +175,7 @@ class _MakeTest(absltest.TestCase):
         "WalkerWalk-v1",
       ]
     )
+
   def test_make_procgen(self) -> None:
     self.check_step(
       [
@@ -212,6 +213,7 @@ class _MakeTest(absltest.TestCase):
         "StarpilotHard-v0",
       ]
     )
+
 
 if __name__ == "__main__":
   absltest.main()
