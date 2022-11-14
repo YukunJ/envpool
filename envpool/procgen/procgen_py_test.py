@@ -151,7 +151,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     eps = np.finfo(np.float32).eps
     obs_min = 0.0 - eps
     obs_max = 255.0 + eps
-    total = 300
+    total = 200
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array([act_space.sample() for _ in range(num_envs)])
@@ -228,7 +228,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       )
     )
     act_spec = env0.action_spec()
-    total = 300
+    total = 200
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array(
@@ -280,10 +280,10 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         self.assertTrue(envpool_reward == raw_reward)
         self.assertTrue(raw_done == envpool_done)
 
-  # def test_gym_deterministic(self) -> None:
-  #   # iterate over all procgen games to test Gym deterministic
-  #   for game in procgen_games_list:
-  #     self.gym_deterministic_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
+  def test_gym_deterministic(self) -> None:
+    # iterate over all procgen games to test Gym deterministic
+    for game in procgen_games_list:
+      self.gym_deterministic_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
 
   # def test_gym_align(self) -> None:
   #   # iterate over all procgen games to test Gym align
