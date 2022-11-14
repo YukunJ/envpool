@@ -279,21 +279,21 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         self.assertTrue(envpool_reward == raw_reward)
         self.assertTrue(raw_done == envpool_done)
 
-  # def test_gym_deterministic(self) -> None:
-  #   # iterate over all procgen games to test Gym deterministic
-  #   for game in procgen_games_list:
-  #     self.gym_deterministic_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
-  #
+  def test_gym_deterministic(self) -> None:
+    # iterate over all procgen games to test Gym deterministic
+    for game in procgen_games_list:
+      self.gym_deterministic_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
+
   # def test_gym_align(self) -> None:
   #   # iterate over all procgen games to test Gym align
   #   for game in procgen_games_list:
   #     self.gym_align_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
   #
-  # def test_dmc_deterministic(self) -> None:
-  #   # iterate over all procgen games to test DMC deterministic
-  #   for game in procgen_games_list:
-  #     self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
-  #
+  def test_dmc_deterministic(self) -> None:
+    # iterate over all procgen games to test DMC deterministic
+    for game in procgen_games_list:
+      self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
+
   # def test_dmc_align(self) -> None:
   #   # iterate over all procgen games to test DMC align
   #   for game in procgen_games_list:
