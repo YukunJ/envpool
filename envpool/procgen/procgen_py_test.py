@@ -151,7 +151,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     eps = np.finfo(np.float32).eps
     obs_min = 0.0 - eps
     obs_max = 255.0 + eps
-    total = 10
+    total = 200
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array([act_space.sample() for _ in range(num_envs)])
@@ -162,16 +162,8 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         close += 1
       if (not np.allclose(obs0, obs2)):
         not_close += 1
-      if (not np.allclose(obs0, obs1)):
-        print("obs 0 and obs 1 not close, wrong")
-        print(f"obs 0: {obs0}")
-        print(f"obs 1: {obs1}")
-      if (np.allclose(obs0, obs2)):
-        print("obs 0 and obs 2 are close, wrong")
-        print(f"obs 0: {obs0}")
-        print(f"obs 2: {obs2}")
-      # np.testing.assert_allclose(obs0, obs1)
-      # self.assertFalse(np.allclose(obs0, obs2))
+      np.testing.assert_allclose(obs0, obs1)
+      self.assertFalse(np.allclose(obs0, obs2))
 
   def gym_align_check(
     self, game_name: str, spec_cls: Any, envpool_cls: Any
@@ -232,7 +224,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       )
     )
     act_spec = env0.action_spec()
-    total = 10
+    total = 200
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array(
