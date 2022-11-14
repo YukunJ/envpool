@@ -151,7 +151,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     eps = np.finfo(np.float32).eps
     obs_min = 0.0 - eps
     obs_max = 255.0 + eps
-    total = 200
+    total = 10
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array([act_space.sample() for _ in range(num_envs)])
@@ -224,7 +224,7 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       )
     )
     act_spec = env0.action_spec()
-    total = 200
+    total = 10
     close, not_close = 0, 0
     for _ in range(total):
       action = np.array(
