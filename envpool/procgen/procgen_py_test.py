@@ -18,8 +18,6 @@ from typing import Any
 
 import cv2
 import dm_env
-import procgen
-from procgen import ProcgenGym3Env
 import gym
 import numpy as np
 from absl import logging
