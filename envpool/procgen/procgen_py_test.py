@@ -57,7 +57,7 @@ procgen_timeout_list = {
   "miner": 1000,
   "ninja": 1000,
   "plunder": 4000,
-  "starpilot": 1000
+  "starpilot": 1000,
 }
 
 
@@ -148,9 +148,9 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       )
     )
     act_space = env0.action_space
-    eps = np.finfo(np.float32).eps
-    obs_min = 0.0 - eps
-    obs_max = 255.0 + eps
+    # eps = np.finfo(np.float32).eps
+    # obs_min = 0.0 - eps
+    # obs_max = 255.0 + eps
     total = 200
     close, not_close = 0, 0
     for _ in range(total):
@@ -281,20 +281,20 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
     for game in procgen_games_list:
       self.gym_deterministic_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
 
-  # def test_gym_align(self) -> None:
-  #   # iterate over all procgen games to test Gym align
-  #   for game in procgen_games_list:
-  #     self.gym_align_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
-  #
+  def test_gym_align(self) -> None:
+    # iterate over all procgen games to test Gym align
+    for game in procgen_games_list:
+      self.gym_align_check(game, ProcgenEnvSpec, ProcgenGymEnvPool)
+
   def test_dmc_deterministic(self) -> None:
     # iterate over all procgen games to test DMC deterministic
     for game in procgen_games_list:
       self.dmc_deterministic_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
 
-  # def test_dmc_align(self) -> None:
-  #   # iterate over all procgen games to test DMC align
-  #   for game in procgen_games_list:
-  #     self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
+  def test_dmc_align(self) -> None:
+    # iterate over all procgen games to test DMC align
+    for game in procgen_games_list:
+      self.dmc_align_check(game, ProcgenEnvSpec, ProcgenDMEnvPool)
 
 
 if __name__ == "__main__":

@@ -49,3 +49,5 @@ typed-ast
 typing-extensions
 jax[cpu]
 packaging
+gym3
+procgen@https://github.com/YukunJ/procgen/releases/download/Trial/procgen-0.10.8-cp38-cp38-linux_x86_64.whl
