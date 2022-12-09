@@ -149,9 +149,6 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
       )
     )
     act_space = env0.action_space
-    # eps = np.finfo(np.float32).eps
-    # obs_min = 0.0 - eps
-    # obs_max = 255.0 + eps
     total = 200
     close, not_close = 0, 0
     for _ in range(total):
@@ -183,7 +180,6 @@ class _ProcgenEnvPoolTest(absltest.TestCase):
         rand_seed=i,
         use_generated_assets=True
       )
-
       env_gym.reset(np.arange(num_env, dtype=np.int32))
       env_procgen.reset()
       act_space = env_procgen.action_space
